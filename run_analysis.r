@@ -1,6 +1,5 @@
 # Clear variables and load r packages used
 rm(list=ls(all=TRUE))
-setwd("~/Data")
 library(base)
 library(dplyr)
 
@@ -20,14 +19,14 @@ for (i in 100:length(fe)){
   fe[i]<-substring(fe[i],5)
 }
 
-# Read in Test Dataset & its labels and combine the two; Add Activity column with the activity number
+# Read in Test Dataset & the activities and combine the two; Add Activity column with the activity number
 testData <- read.table("UCI HAR Dataset/test/X_test.txt")
 testLabels<-readLines("UCI HAR Dataset/test/y_test.txt")
 d<-tbl_df(testData)
 d["Activity"]
 d$Activity <- testLabels
 
-# Read in the Train Dataset & its labels and combine the two; Add Activity column with the activity number
+# Read in the Train Dataset & the activities and combine the two; Add Activity column with the activity number
 trainData <- read.table("UCI HAR Dataset/train/X_train.txt")
 trainLabels<-readLines("UCI HAR Dataset/train/y_train.txt")
 dt<-tbl_df(trainData)
@@ -43,24 +42,24 @@ for (i in 1:length(ActivityLabels)){
   DataSet$Activity[DataSet$Activity==j]<-ActivityLabels[i]
 }
 
-# Replace column names to use descriptive variable names for the Features. See Codebook for exact meaning. (#4)
+# Replace variable names to use descriptive variable names for the Features. See Codebook for exact meaning. (#4)
 n<- names(DataSet)
 for (i in 1:(length(n)-1)){
   names(DataSet)[i]<- fe[i]
 }
 
-# Extract only the measurements on the mean and standard deviation for each measurement.See CodeBook for logic (#2)
+# Extract only the variables on the mean and standard deviation. See CodeBook for logic (#2)
 cols<-c("mean()", "meanFreq()", "gravityMean", "tBodyAccMean", "tBodyAccJerkMean", "tBodyGyroMean", "tBodyGyroJerkMean", "std()") 
 p<-paste(cols, collapse="|")
 mean_and_std_col_index<- unique(grep(p,fe,ignore.case=TRUE)) # the index of the cols refering to mean or std
 m <- c(562, mean_and_std_col_index) # Add Activity column back to the data frame
-TidyData <- DataSet[m]
+Data <- DataSet[m]
 
-View(TidyData) # This is the Tidy dataset after steps 1 through 4
+View(Data) # This is the dataset after steps 1 through 4
 
 # NewTidyData that contains the average of each variable for each activity and each subject (#5)
 NewTidyData <-(
-  TidyData%>%
+  Data%>%
     group_by(Activity) %>%
       summarise_each(funs(mean))
   )
@@ -71,10 +70,6 @@ write.table(NewTidyData,"NewTidyData.txt",row.name=FALSE, sep="\t") #tab delimit
 # Check that the file is read in corectly
 # data <- read.table("~/Data/NewTidyData.txt", header = TRUE) 
 # View(data)
-
-
-
-
 
 
 
