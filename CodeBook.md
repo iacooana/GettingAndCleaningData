@@ -1,8 +1,8 @@
 ####Getting and Cleaning Data Course Project####
 
 ===================================================================================================================================================
-## Data Dictionary - Human Activity Recognition Using Smartphones ## 
-### **_Average of Mean and Standard Deviation Measurements per Activity - Tidy Data Set_** ### 
+## Data Dictionary - Human Activity Recognition Using Smartphones 
+### **_Average of Mean and Standard Deviation Measurements per Activity - Tidy Data Set_**
 ===================================================================================================================================================
 
 
